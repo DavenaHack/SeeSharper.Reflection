@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -13,8 +14,12 @@ namespace Mimp.SeeSharper.Reflection
         /// </summary>
         /// <param name="assembly"></param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static IEnumerable<Assembly> GetAssemblies(this Assembly assembly)
         {
+            if (assembly is null)
+                throw new ArgumentNullException(nameof(assembly));
+
             var assemblies = new List<AssemblyName> { assembly.GetName() };
 
             var next = new List<Assembly> { assembly };

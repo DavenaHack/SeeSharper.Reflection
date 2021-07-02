@@ -8,6 +8,16 @@ namespace Mimp.SeeSharper.Reflection
     {
 
 
+        /// <summary>
+        /// Return a compiled delegate to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <param name="delegateType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If delegate has one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
         public static Delegate GetCastDelegate(this Type source, Type destination, Type delegateType)
         {
             if (source is null)
@@ -35,6 +45,15 @@ namespace Mimp.SeeSharper.Reflection
             ).Compile();
         }
 
+        /// <summary>
+        /// Return a compiled delegate to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If delegate has one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
         public static Delegate GetCastDelegate(this Type source, Type destination)
         {
             if (source is null)
@@ -45,41 +64,88 @@ namespace Mimp.SeeSharper.Reflection
             return source.GetCastDelegate(destination, Expression.GetFuncType(source, destination));
         }
 
-        public static T GetCastDelegate<T>(this Type source, Type destination) where T : Delegate
+        /// <summary>
+        /// Return a compiled delegate to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If delegate has one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
+        public static TDelegate GetCastDelegate<TDelegate>(this Type source, Type destination) where TDelegate : Delegate
         {
             if (source is null)
                 throw new ArgumentNullException(nameof(source));
             if (destination is null)
                 throw new ArgumentNullException(nameof(destination));
 
-            return (T)source.GetCastDelegate(destination, typeof(T));
+            return (TDelegate)source.GetCastDelegate(destination, typeof(TDelegate));
         }
 
-        public static T GetCastDelegate<T>(this Type source) where T : Delegate
+        /// <summary>
+        /// Return a compiled delegate to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If delegate has one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
+        public static TDelegate GetCastDelegate<TDelegate>(this Type source) where TDelegate : Delegate
         {
             if (source is null)
                 throw new ArgumentNullException(nameof(source));
 
-            return (T)source.GetCastDelegate(typeof(T).GetDelegateReturnType(), typeof(T));
+            return (TDelegate)source.GetCastDelegate(typeof(TDelegate).GetDelegateReturnType(), typeof(TDelegate));
         }
 
-        public static Func<object, object?> GetCastFunc(this Type source, Type destination)
+        /// <summary>
+        /// Return a compiled function to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
+        public static Func<object?, object?> GetCastFunc(this Type source, Type destination)
         {
             if (source is null)
                 throw new ArgumentNullException(nameof(source));
             if (destination is null)
                 throw new ArgumentNullException(nameof(destination));
 
-            return source.GetCastDelegate<Func<object, object?>>(destination);
+            return source.GetCastDelegate<Func<object?, object?>>(destination);
         }
 
-        public static Func<object, T> GetCastFunc<T>(this Type source)
+        /// <summary>
+        /// Return a compiled function to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <typeparam name="TSource"></typeparam>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
+        public static Func<TSource, TDestination> GetCastFunc<TSource, TDestination>(this Type source)
         {
             if (source is null)
                 throw new ArgumentNullException(nameof(source));
 
-            return source.GetCastDelegate<Func<object, T>>();
+            return source.GetCastDelegate<Func<TSource, TDestination>>();
         }
+
+        /// <summary>
+        /// Return a compiled function to cast a object of <paramref name="source"/> to <paramref name="destination"/>.
+        /// </summary>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If source isn't castable to destination.</exception>
+        public static Func<object?, TDestination> GetCastFunc<TDestination>(this Type source) =>
+            source.GetCastFunc<object?, TDestination>();
 
 
     }

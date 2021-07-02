@@ -10,6 +10,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Mimp.SeeSharper.Reflection.Dynamic
 {
+    /// <summary>
+    /// A <see cref="IDynamicMetaObjectProvider"/> that implementd <see cref="IDictionary{string, object?}"/> explicit.
+    /// It allow to notify changes with <see cref="INotifyPropertyChanging"/> and <see cref="INotifyPropertyChanged"/>.
+    /// </summary>
     public sealed class DictionaryDynamicObject : IDictionary<string, object?>, IDynamicMetaObjectProvider, INotifyPropertyChanging, INotifyPropertyChanged
     {
 

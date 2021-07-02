@@ -1,8 +1,10 @@
 ﻿namespace Mimp.SeeSharper.Reflection
 {
-    
-    public delegate object ParamsFunc(params object?[] parameters);
 
-    public delegate T ParamsFunc<T>(params object?[] parameters);
+    /// <summary>
+    /// <see cref="ParamsFunc"/> represent a delegate to invoke a method and allow to pass the parameters as params.
+    /// </summary>
+    /// <param name="parameters"></param>
+    public delegate object ParamsFunc(params object?[] parameters);
 
 }

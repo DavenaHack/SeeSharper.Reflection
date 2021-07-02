@@ -10,6 +10,12 @@ namespace Mimp.SeeSharper.Reflection
     {
 
 
+        /// <summary>
+        /// Return all parameter types from consturctor.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static IEnumerable<Type> GetParameterTypes(this ConstructorInfo constructor)
         {
             if (constructor is null)
@@ -19,6 +25,12 @@ namespace Mimp.SeeSharper.Reflection
                 yield return p.ParameterType;
         }
 
+        /// <summary>
+        /// Return all parameter types and reflected type from constructor.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static IEnumerable<Type> GetConstructorTypes(this ConstructorInfo constructor)
         {
             if (constructor is null)
@@ -33,6 +45,15 @@ namespace Mimp.SeeSharper.Reflection
         #region Delegate
 
 
+        /// <summary>
+        /// Return a compiled delegate to invoke the constructor with a array of the parameters.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <param name="delegateType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter with a array as type.</exception>
+        /// <exception cref="InvalidOperationException">If the return type of the delegate isn't castable to the constructor reflected type.</exception>
         public static Delegate GetParameterDelegate(this ConstructorInfo constructor, Type delegateType)
         {
             if (constructor is null)
@@ -67,15 +88,29 @@ namespace Mimp.SeeSharper.Reflection
             ), parameters).Compile();
         }
 
-
-        public static T GetParameterDelegate<T>(this ConstructorInfo constructor) where T : Delegate
+        /// <summary>
+        /// Return a compiled delegate to invoke the constructor with a array of the parameters.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter with a array as type.</exception>
+        /// <exception cref="InvalidOperationException">If the return type of the delegate isn't castable to the constructor reflected type.</exception>
+        public static TDelegate GetParameterDelegate<TDelegate>(this ConstructorInfo constructor) where TDelegate : Delegate
         {
             if (constructor is null)
                 throw new ArgumentNullException(nameof(constructor));
 
-            return (T)constructor.GetParameterDelegate(typeof(T));
+            return (TDelegate)constructor.GetParameterDelegate(typeof(TDelegate));
         }
 
+        /// <summary>
+        /// Return a compiled function to invoke the constructor with a array of the parameters.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static Func<object?[], object> GetParameterFunc(this ConstructorInfo constructor)
         {
             if (constructor is null)
@@ -84,6 +119,12 @@ namespace Mimp.SeeSharper.Reflection
             return constructor.GetParameterDelegate<Func<object?[], object>>();
         }
 
+        /// <summary>
+        /// Return a compiled function to invoke the constructor with a array of the parameters.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static ParamsFunc GetParamsFunc(this ConstructorInfo constructor)
         {
             if (constructor is null)
@@ -92,6 +133,16 @@ namespace Mimp.SeeSharper.Reflection
             return constructor.GetParameterDelegate<ParamsFunc>();
         }
 
+
+        /// <summary>
+        /// Return a compiled delegate to invoke the constructor.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <param name="delegateType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't equal parameter as the constructor.</exception>
+        /// <exception cref="InvalidOperationException">If one of the parameter types or the return type of the delegate isn't castable to the constructor types.</exception>
         public static Delegate GetDelegate(this ConstructorInfo constructor, Type delegateType)
         {
             if (constructor is null)
@@ -119,14 +170,30 @@ namespace Mimp.SeeSharper.Reflection
             return Expression.Lambda(delegateType, Expression.New(constructor, arguments), parameters).Compile();
         }
 
-        public static T GetDelegate<T>(this ConstructorInfo constructor) where T : Delegate
+        /// <summary>
+        /// Return a compiled delegate to invoke the constructor.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't equal parameter as the constructor.</exception>
+        /// <exception cref="InvalidOperationException">If one of the parameter types or the return type of the delegate isn't castable to the constructor types.</exception>
+        public static TDelegate GetDelegate<TDelegate>(this ConstructorInfo constructor) where TDelegate : Delegate
         {
             if (constructor is null)
                 throw new ArgumentNullException(nameof(constructor));
 
-            return (T)constructor.GetDelegate(typeof(T));
+            return (TDelegate)constructor.GetDelegate(typeof(TDelegate));
         }
 
+
+        /// <summary>
+        /// Return a compiled delegate to invoke the constructor with the structor like the constructor.
+        /// </summary>
+        /// <param name="constructor"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static Delegate GetDelegate(this ConstructorInfo constructor)
         {
             if (constructor is null)

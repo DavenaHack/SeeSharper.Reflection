@@ -12,6 +12,15 @@ namespace Mimp.SeeSharper.Reflection
         #region GetInstanceAccessDelegate
 
 
+        /// <summary>
+        /// Return a compiled delegate to access the field.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="delegateType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If the field type isn't castable to the delegate return type.</exception>
         public static Delegate GetInstanceAccessDelegate(this FieldInfo field, Type delegateType)
         {
             if (field is null)
@@ -37,6 +46,29 @@ namespace Mimp.SeeSharper.Reflection
             ).Compile();
         }
 
+        /// <summary>
+        /// Return a compiled delegate to access the field.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter for the instance.</exception>
+        /// <exception cref="InvalidOperationException">If the field type isn't castable to the delegate return type.</exception>
+        public static TDelegate GetInstanceAccessDelegate<TDelegate>(this FieldInfo field) where TDelegate : Delegate
+        {
+            if (field is null)
+                throw new ArgumentNullException(nameof(field));
+
+            return (TDelegate)field.GetInstanceAccessDelegate(typeof(TDelegate));
+        }
+
+        /// <summary>
+        /// Return a compiled delegate to access the field with a return type of the field type.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static Delegate GetInstanceAccessDelegate(this FieldInfo field)
         {
             if (field is null)
@@ -45,21 +77,38 @@ namespace Mimp.SeeSharper.Reflection
             return field.GetInstanceAccessDelegate(Expression.GetFuncType(field.ReflectedType!, field.FieldType));
         }
 
-        public static T GetInstanceAccessDelegate<T>(this FieldInfo field) where T : Delegate
+        /// <summary>
+        /// Return a compiled function to access the field.
+        /// </summary>
+        /// <typeparam name="TInstance"></typeparam>
+        /// <typeparam name="TField"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        public static Func<TInstance, TField> GetInstanceAccessFunc<TInstance, TField>(this FieldInfo field)
+            where TInstance : notnull
         {
             if (field is null)
                 throw new ArgumentNullException(nameof(field));
 
-            return (T)field.GetInstanceAccessDelegate(typeof(T));
+            return field.GetInstanceAccessDelegate<Func<TInstance, TField>>();
         }
 
-        public static Func<object, object?> GetInstanceAccessFunc(this FieldInfo field)
-        {
-            if (field is null)
-                throw new ArgumentNullException(nameof(field));
+        /// <summary>
+        /// Return a compiled function to access the field.
+        /// </summary>
+        /// <typeparam name="TField"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        public static Func<object, TField> GetInstanceAccessFunc<TField>(this FieldInfo field) =>
+            field.GetInstanceAccessFunc<object, TField>();
 
-            return field.GetInstanceAccessDelegate<Func<object, object?>>();
-        }
+        /// <summary>
+        /// Return a compiled function to access the field.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        public static Func<object, object?> GetInstanceAccessFunc(this FieldInfo field) =>
+            field.GetInstanceAccessFunc<object?>();
 
 
         #endregion GetInstanceAccessDelegate
@@ -68,6 +117,15 @@ namespace Mimp.SeeSharper.Reflection
         #region GetInstanceAssignDelegate
 
 
+        /// <summary>
+        /// Return a compiled delegate to assign the field.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="delegateType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter for the instance and one parameter for the value.</exception>
+        /// <exception cref="InvalidOperationException">If the delegate value type isn't castable to the field type.</exception>
         public static Delegate GetInstanceAssignDelegate(this FieldInfo field, Type delegateType)
         {
             if (field is null)
@@ -91,6 +149,29 @@ namespace Mimp.SeeSharper.Reflection
             ).Compile();
         }
 
+        /// <summary>
+        /// Return a compiled delegate to assign the field.
+        /// </summary>
+        /// <typeparam name="TDelegate"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If the delegate hasn't one parameter for the instance and one parameter for the value.</exception>
+        /// <exception cref="InvalidOperationException">If the delegate value type isn't castable to the field type.</exception>
+        public static TDelegate GetInstanceAssignDelegate<TDelegate>(this FieldInfo field) where TDelegate : Delegate
+        {
+            if (field is null)
+                throw new ArgumentNullException(nameof(field));
+
+            return (TDelegate)field.GetInstanceAssignDelegate(typeof(TDelegate));
+        }
+
+        /// <summary>
+        /// Return a compiled delegate to assign the field with a parameter of the field type.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static Delegate GetInstanceAssignDelegate(this FieldInfo field)
         {
             if (field is null)
@@ -99,21 +180,41 @@ namespace Mimp.SeeSharper.Reflection
             return field.GetInstanceAssignDelegate(Expression.GetActionType(field.ReflectedType!, field.FieldType));
         }
 
-        public static T GetInstanceAssignDelegate<T>(this FieldInfo field) where T : Delegate
+        /// <summary>
+        /// Return a compield action to assign the field.
+        /// </summary>
+        /// <typeparam name="TInstance"></typeparam>
+        /// <typeparam name="TField"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static Action<TInstance, TField> GetInstanceAssignAction<TInstance, TField>(this FieldInfo field)
+            where TInstance : notnull
         {
             if (field is null)
                 throw new ArgumentNullException(nameof(field));
 
-            return (T)field.GetInstanceAssignDelegate(typeof(T));
+            return field.GetInstanceAssignDelegate<Action<TInstance, TField?>>();
         }
 
-        public static Action<object, object?> GetInstanceAssignAction(this FieldInfo field)
-        {
-            if (field is null)
-                throw new ArgumentNullException(nameof(field));
+        /// <summary>
+        /// Return a compield action to assign the field.
+        /// </summary>
+        /// <typeparam name="TField"></typeparam>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static Action<object, TField> GetInstanceAssignAction<TField>(this FieldInfo field) =>
+            field.GetInstanceAssignAction<object, TField>();
 
-            return field.GetInstanceAssignDelegate<Action<object, object?>>();
-        }
+        /// <summary>
+        /// Return a compield action to assign the field.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static Action<object, object?> GetInstanceAssignAction(this FieldInfo field) =>
+            field.GetInstanceAssignAction<object?>();
 
 
         #endregion SetInstanceMemberDelegate

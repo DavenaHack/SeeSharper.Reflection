@@ -8,6 +8,12 @@ namespace Mimp.SeeSharper.Reflection
     {
 
 
+        /// <summary>
+        /// Check if type has any generic types unspecified type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static bool HasGenericParameters(this Type type)
         {
             if (type is null)
@@ -16,7 +22,14 @@ namespace Mimp.SeeSharper.Reflection
             return type.IsGenericTypeDefinition || type.ContainsGenericParameters;
         }
 
-
+        /// <summary>
+        /// Return all generic arguments of <paramref name="genericTypeDefinition"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="genericTypeDefinition"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
         public static IEnumerable<IEnumerable<Type>> GetGenericArguments(this Type type, Type genericTypeDefinition)
         {
             if (type is null)
@@ -51,6 +64,15 @@ namespace Mimp.SeeSharper.Reflection
                     yield return types!;
         }
 
+        /// <summary>
+        /// Return generic arguments of <paramref name="genericTypeDefinition"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="genericTypeDefinition"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="type"/> inherit no or more than one <paramref name="genericTypeDefinition"/>.</exception>
         public static IEnumerable<Type> GetGenericArgumentsRequired(this Type type, Type genericTypeDefinition)
         {
             IEnumerable<Type>? result = null;
@@ -68,7 +90,14 @@ namespace Mimp.SeeSharper.Reflection
             return result;
         }
 
-
+        /// <summary>
+        /// Return all inherit types of <paramref name="genericTypeDefinition"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="genericTypeDefinition"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
         public static IEnumerable<Type> GetGenericTypes(this Type type, Type genericTypeDefinition)
         {
             if (type is null)
@@ -83,6 +112,15 @@ namespace Mimp.SeeSharper.Reflection
                 yield return types.Any() ? genericTypeDefinition.MakeGenericType(types.ToArray()) : genericTypeDefinition;
         }
 
+        /// <summary>
+        /// Return inherit type of <paramref name="genericTypeDefinition"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="genericTypeDefinition"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
+        /// <exception cref="InvalidOperationException">If <paramref name="type"/> inherit no or more than one <paramref name="genericTypeDefinition"/>.</exception>
         public static Type GetGenericType(this Type type, Type genericTypeDefinition)
         {
             Type? result = null;
@@ -100,7 +138,15 @@ namespace Mimp.SeeSharper.Reflection
             return result;
         }
 
-
+        /// <summary>
+        /// Resolve all possible combinations with generics of <paramref name="inheritGenericType"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="inheritGenericType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="type"/> or <paramref name="inheritGenericType"/> isn't a generic type definition.</exception>
+        /// <exception cref="InvalidOperationException">If a generic argument has ambigous resolving types.</exception>
         public static IEnumerable<Type> ResolveInheritGenericTypes(this Type type, Type inheritGenericType)
         {
             if (type is null)
@@ -145,6 +191,18 @@ namespace Mimp.SeeSharper.Reflection
                 }
         }
 
+        /// <summary>
+        /// Resolve generics of <paramref name="inheritGenericType"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="inheritGenericType"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException">If <paramref name="type"/> or <paramref name="inheritGenericType"/> isn't a generic type definition.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If exist no or more than one resolves types.
+        /// If a generic argument has ambigous resolving types.
+        /// </exception>
         public static Type ResolveInheritGenericType(this Type type, Type inheritGenericType)
         {
             Type? result = null;

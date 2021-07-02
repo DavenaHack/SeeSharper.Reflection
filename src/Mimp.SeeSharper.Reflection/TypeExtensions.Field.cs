@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Mimp.SeeSharper.Reflection
@@ -8,7 +9,17 @@ namespace Mimp.SeeSharper.Reflection
     {
 
 
-        public static FieldInfo[] GetFields(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase)
+        /// <summary>
+        /// Return all matching fields.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<FieldInfo> GetFields(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -18,7 +29,7 @@ namespace Mimp.SeeSharper.Reflection
             var fields = new List<FieldInfo>();
             foreach (var f in type.GetRuntimeFields())
             {
-                if (hasPublic && !f.IsPublic)
+                if (isPublic && !f.IsPublic)
                     continue;
 
                 if (isStatic != f.IsStatic)
@@ -36,25 +47,44 @@ namespace Mimp.SeeSharper.Reflection
 
                 fields.Add(f);
             }
-            return fields.ToArray();
+            return fields;
         }
 
-        public static FieldInfo GetField(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase)
+        /// <summary>
+        /// Return the matching field.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one field exsists.</exception>
+        /// <returns></returns>
+        public static FieldInfo GetField(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            var fields = type.GetFields(name, hasPublic, isStatic, ignoreCase);
-            if (fields is null || fields.Length == 0)
-                throw new InvalidOperationException($@"Type ""{type}"" has no property ""{name}""");
-            if (fields.Length != 1)
+            var fields = type.GetFields(name, isPublic, isStatic, ignoreCase);
+            if (fields is null || !fields.Any())
+                throw new InvalidOperationException($@"Type ""{type}"" has no field ""{name}""");
+            if (fields.Skip(1).Any())
                 throw new InvalidOperationException($@"Field ""{name}"" is ambiguous for ""{type}""");
-            return fields[0];
+            return fields.First();
         }
 
-
+        /// <summary>
+        /// Return the public instance field.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one field exsists.</exception>
         public static FieldInfo GetInstanceField(this Type type, string name, bool ignoreCase)
         {
             if (type is null)
@@ -65,6 +95,14 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetField(name, true, false, ignoreCase);
         }
 
+        /// <summary>
+        /// Return the public instance field.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one field exsists.</exception>
         public static FieldInfo GetInstanceField(this Type type, string name)
         {
             if (type is null)
@@ -75,6 +113,15 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetField(name, true, false, true);
         }
 
+        /// <summary>
+        /// Return the public static field.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one field exsists.</exception>
         public static FieldInfo GetStaticField(this Type type, string name, bool ignoreCase)
         {
             if (type is null)
@@ -85,6 +132,14 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetField(name, true, true, ignoreCase);
         }
 
+        /// <summary>
+        /// Return the public static field.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one field exsists.</exception>
         public static FieldInfo GetStaticField(this Type type, string name)
         {
             if (type is null)

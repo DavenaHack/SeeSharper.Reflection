@@ -12,7 +12,19 @@ namespace Mimp.SeeSharper.Reflection
         #region GetMethods
 
 
-        public static MethodInfo[] GetMethods(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return all matching methods.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -20,7 +32,7 @@ namespace Mimp.SeeSharper.Reflection
                 throw new ArgumentNullException(nameof(name));
 
             var genParams = genericParameters?.ToArray();
-            var ts = types?.ToArray();
+            var ts = parameterTypes?.ToArray();
 
             var methods = new List<MethodInfo>();
             foreach (var m in type.GetRuntimeMethods())
@@ -40,7 +52,7 @@ namespace Mimp.SeeSharper.Reflection
                         continue;
                 }
 
-                if (hasPublic && !meth.IsPublic)
+                if (isPublic && !meth.IsPublic)
                 {
                     var i = meth.Name.LastIndexOf('.');
                     if (i < 0)
@@ -115,47 +127,93 @@ namespace Mimp.SeeSharper.Reflection
 
                 methods.Add(m);
             }
-            return methods.ToArray();
+            return methods;
         }
 
-        public static MethodInfo[] GetMethods(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return all matching methods.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethods(name, hasPublic, isStatic, ignoreCase, genericParameters < 0 ? null : new Type[genericParameters], types);
+            return type.GetMethods(name, isPublic, isStatic, ignoreCase, genericParameters < 0 ? null : new Type[genericParameters], parameterTypes);
         }
 
-        public static MethodInfo[] GetMethods(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int genericParameters, int parameterTypes)
+        /// <summary>
+        /// Return all matching methods.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int genericParameters, int parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethods(name, hasPublic, isStatic, ignoreCase, genericParameters, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
+            return type.GetMethods(name, isPublic, isStatic, ignoreCase, genericParameters, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
         }
 
-        public static MethodInfo[] GetMethods(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return all matching methods.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethods(name, hasPublic, isStatic, ignoreCase, null, types);
+            return type.GetMethods(name, isPublic, isStatic, ignoreCase, null, parameterTypes);
         }
 
-        public static MethodInfo[] GetMethods(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int parameterTypes)
+        /// <summary>
+        /// Return all matching methods.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethods(name, hasPublic, isStatic, ignoreCase, null, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
+            return type.GetMethods(name, isPublic, isStatic, ignoreCase, null, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
         }
 
 
@@ -165,105 +223,221 @@ namespace Mimp.SeeSharper.Reflection
         #region GetMethod
 
 
-        public static MethodInfo GetMethod(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return matching method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetMethod(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            var methods = type.GetMethods(name, hasPublic, isStatic, ignoreCase, genericParameters, types);
-            if (methods is null || methods.Length == 0)
+            var methods = type.GetMethods(name, isPublic, isStatic, ignoreCase, genericParameters, parameterTypes);
+            if (methods is null || !methods.Any())
                 throw new InvalidOperationException($@"Type ""{type}"" has no method ""{name}""");
-            if (methods.Length != 1)
+            if (methods.Skip(1).Any())
                 throw new InvalidOperationException($@"Method ""{name}"" is ambiguous for ""{type}""");
-            return methods[0];
+            return methods.First();
         }
 
-        public static MethodInfo GetMethod(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return matching method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetMethod(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, hasPublic, isStatic, ignoreCase, genericParameters < 0 ? null : new Type[genericParameters], types);
+            return type.GetMethod(name, isPublic, isStatic, ignoreCase, genericParameters < 0 ? null : new Type[genericParameters], parameterTypes);
         }
 
-        public static MethodInfo GetMethod(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int genericParameters, int parameterTypes)
+        /// <summary>
+        /// Return matching method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetMethod(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int genericParameters, int parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, hasPublic, isStatic, ignoreCase, genericParameters, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
+            return type.GetMethod(name, isPublic, isStatic, ignoreCase, genericParameters, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
         }
 
-        public static MethodInfo GetMethod(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return matching method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetMethod(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, hasPublic, isStatic, ignoreCase, null, types);
+            return type.GetMethod(name, isPublic, isStatic, ignoreCase, null, parameterTypes);
         }
 
-        public static MethodInfo GetMethod(this Type type, string name, bool hasPublic, bool isStatic, bool ignoreCase, int parameterTypes)
+        /// <summary>
+        /// Return matching method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="isPublic"></param>
+        /// <param name="isStatic"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetMethod(this Type type, string name, bool isPublic, bool isStatic, bool ignoreCase, int parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, hasPublic, isStatic, ignoreCase, null, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
+            return type.GetMethod(name, isPublic, isStatic, ignoreCase, null, parameterTypes < 0 ? null : new Type[parameterTypes + 1]);
         }
 
 
         #region GetInstanceMethod
 
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, ignoreCase, genericParameters, types);
+            return type.GetMethod(name, true, false, ignoreCase, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, true, genericParameters, types);
+            return type.GetMethod(name, true, false, true, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, ignoreCase, genericParameters, types);
+            return type.GetMethod(name, true, false, ignoreCase, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, true, genericParameters, types);
+            return type.GetMethod(name, true, false, true, genericParameters, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, int genericParameters, int parameterTypes)
         {
             if (type is null)
@@ -274,6 +448,16 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, false, ignoreCase, genericParameters, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name, int genericParameters, int parameterTypes)
         {
             if (type is null)
@@ -284,26 +468,55 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, false, true, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, ignoreCase, null, types);
+            return type.GetMethod(name, true, false, ignoreCase, null, parameterTypes);
         }
 
-        public static MethodInfo GetInstanceMethod(this Type type, string name, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetInstanceMethod(this Type type, string name, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, false, true, null, types);
+            return type.GetMethod(name, true, false, true, null, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase, int parameterTypes)
         {
             if (type is null)
@@ -314,6 +527,15 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, false, ignoreCase, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name, int parameterTypes)
         {
             if (type is null)
@@ -324,6 +546,15 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, false, true, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name, bool ignoreCase)
         {
             if (type is null)
@@ -334,6 +565,14 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, false, ignoreCase, null, null);
         }
 
+        /// <summary>
+        /// Return public instance method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetInstanceMethod(this Type type, string name)
         {
             if (type is null)
@@ -351,46 +590,99 @@ namespace Mimp.SeeSharper.Reflection
         #region GetStaticMethod
 
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, ignoreCase, genericParameters, types);
+            return type.GetMethod(name, true, true, ignoreCase, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, IEnumerable<Type>? genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, IEnumerable<Type>? genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, true, genericParameters, types);
+            return type.GetMethod(name, true, true, true, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, ignoreCase, genericParameters, types);
+            return type.GetMethod(name, true, true, ignoreCase, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, int genericParameters, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, int genericParameters, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, true, genericParameters, types);
+            return type.GetMethod(name, true, true, true, genericParameters, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, int genericParameters, int parameterTypes)
         {
             if (type is null)
@@ -401,6 +693,16 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, true, ignoreCase, genericParameters, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="genericParameters"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name, int genericParameters, int parameterTypes)
         {
             if (type is null)
@@ -411,26 +713,55 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, true, true, genericParameters, parameterTypes);
         }
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, ignoreCase, null, types);
+            return type.GetMethod(name, true, true, ignoreCase, null, parameterTypes);
         }
 
-        public static MethodInfo GetStaticMethod(this Type type, string name, IEnumerable<Type>? types)
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
+        public static MethodInfo GetStaticMethod(this Type type, string name, IEnumerable<Type>? parameterTypes)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
 
-            return type.GetMethod(name, true, true, true, null, types);
+            return type.GetMethod(name, true, true, true, null, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase, int parameterTypes)
         {
             if (type is null)
@@ -441,6 +772,15 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, true, ignoreCase, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="parameterTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name, int parameterTypes)
         {
             if (type is null)
@@ -451,6 +791,15 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, true, true, parameterTypes);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <param name="ignoreCase"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name, bool ignoreCase)
         {
             if (type is null)
@@ -461,6 +810,14 @@ namespace Mimp.SeeSharper.Reflection
             return type.GetMethod(name, true, true, ignoreCase, null, null);
         }
 
+        /// <summary>
+        /// Return public static method.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no or more than one mehtod exists.</exception>
         public static MethodInfo GetStaticMethod(this Type type, string name)
         {
             if (type is null)

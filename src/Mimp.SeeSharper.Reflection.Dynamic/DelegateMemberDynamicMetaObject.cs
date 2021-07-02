@@ -6,6 +6,10 @@ using System.Linq.Expressions;
 
 namespace Mimp.SeeSharper.Reflection.Dynamic
 {
+    /// <summary>
+    /// A <see cref="DynamicMetaObject"/> that allow dynamic expression to the members of this. 
+    /// If no member exists it delegate the dynamic expression to a <see cref="IDynamicMetaObjectProvider"/>.
+    /// </summary>
     public class DelegateMemberDynamicMetaObject : DynamicMetaObject
     {
 

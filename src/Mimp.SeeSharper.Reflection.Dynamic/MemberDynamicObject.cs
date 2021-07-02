@@ -6,6 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace Mimp.SeeSharper.Reflection.Dynamic
 {
+    /// <summary>
+    /// A <see cref="IDynamicMetaObjectProvider"/> that allow dynamic expression to members of this.
+    /// If no member exists it will use dynamic members.
+    /// It allow to notify dynamic changes with <see cref="INotifyPropertyChanging"/> and <see cref="INotifyPropertyChanged"/>.
+    /// </summary>
     public class MemberDynamicObject : IDynamicMetaObjectProvider, INotifyPropertyChanging, INotifyPropertyChanged
     {
 

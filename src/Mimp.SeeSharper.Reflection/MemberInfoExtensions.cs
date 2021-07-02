@@ -7,6 +7,13 @@ namespace Mimp.SeeSharper.Reflection
     {
 
 
+        /// <summary>
+        /// Return the property or field type of the member.
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If member isn't a property or a field</exception>
         public static Type GetPropertyOrFieldType(this MemberInfo member)
         {
             if (member is null)

@@ -8,6 +8,11 @@ namespace Mimp.SeeSharper.Reflection.Dynamic
     {
 
 
+        /// <summary>
+        /// Return the <see cref="DynamicMetaObject"/> of <paramref name="provider"/>.
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <returns></returns>
         public static DynamicMetaObject GetMetaObject(this IDynamicMetaObjectProvider provider)
         {
             if (provider is null)
