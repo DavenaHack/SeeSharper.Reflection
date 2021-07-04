@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@master
     
@@ -29,20 +29,13 @@ jobs:
       with:
         dotnet-version: 2.1.x
         
-    - name: Setup .NET Framework 4.8
-      uses: actions/setup-dotnet@master
-      with:
-        dotnet-version: 4.8.x
-        
-    - name: Setup .NET Framework 4.6.1
-      uses: actions/setup-dotnet@master
-      with:
-        dotnet-version: 4.6.1
-        
-        
+    # .NET Frameworks are preinstalled
+                
     - name: Restore dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --no-restore
+      
     - name: Test
       run: dotnet test --no-build --verbosity normal
