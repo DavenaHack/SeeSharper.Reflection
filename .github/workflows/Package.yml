@@ -3,7 +3,7 @@ name: Package
 on:
   create:
     tags:
-    - '[\d\w.]+@v[\d\w.]+'
+    - '*@v*'
 
 env:
   PACKAGE_OUTPUT: ${{github.workspace}}/output
