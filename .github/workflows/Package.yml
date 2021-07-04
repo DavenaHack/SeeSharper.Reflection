@@ -47,12 +47,12 @@ jobs:
       
     - name: Pack Release
       working-directory: ./src
-      run: dotnet pack ${{steps.tag.outputs.package}} --no-restore --no-build --configuration Release --output ${{ env.PACKAGE_OUTPUT }}
+      run: dotnet pack ${{steps.tag.outputs.package}} --no-restore --no-build --configuration Release --output ${{env.PACKAGE_OUTPUT}}
       
       
     - name: Push package to GitHub
       run: dotnet nuget push ${{env.PACKAGE_OUTPUT}}/${{steps.tag.outputs.package}}.${{steps.tag.outputs.version}}.nupkg 
-        --source 'https://nuget.pkg.github.com/DavenaHack/index.json' --api-key ${{secrets.NUGET_TOKEN}}
+        --source 'https://nuget.pkg.github.com/DavenaHack/index.json' --api-key ${{secrets.NUGET_GITHUB_TOKEN}}
       
     - name: Push package to NuGet
       run: dotnet nuget push ${{env.PACKAGE_OUTPUT}}/${{steps.tag.outputs.package}}.${{steps.tag.outputs.version}}.nupkg 
