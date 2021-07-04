@@ -34,11 +34,11 @@ jobs:
                 
     - name: Build Debug
       working-directory: ./src
-      run: dotnet build --no-restore --configuration Debug
+      run: dotnet build --configuration Debug
       
     - name: Build Release
       working-directory: ./src
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build --configuration Release
       
     - name: Test
       working-directory: ./test
