@@ -11,6 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     
+    name: Setup
     steps:
     - uses: actions/checkout@master
     
@@ -31,11 +32,14 @@ jobs:
         
     # .NET Frameworks are preinstalled
                 
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Build Debug
+      working-directory: ./src
+      run: dotnet build --no-restore --configuration Debug
       
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Build Release
+      working-directory: ./src
+      run: dotnet build --no-restore --configuration Release
       
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      working-directory: ./test
+      run: dotnet test --verbosity normal
