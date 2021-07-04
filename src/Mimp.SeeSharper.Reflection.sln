@@ -8,6 +8,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mimp.SeeSharper.Reflection.Dynamic", "Mimp.SeeSharper.Reflection.Dynamic\Mimp.SeeSharper.Reflection.Dynamic.csproj", "{50CCD90D-580B-48AE-A185-03D8D1850F79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mimp.SeeSharper.Reflection.Expression", "Mimp.SeeSharper.Reflection.Expression\Mimp.SeeSharper.Reflection.Expression.csproj", "{E67146A4-8E9C-405D-A18E-494EB07AFEB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
