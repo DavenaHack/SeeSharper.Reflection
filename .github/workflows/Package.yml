@@ -15,6 +15,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+      with:
+        submodules: true
     
     - name: Setup .NET 5
       uses: actions/setup-dotnet@master
