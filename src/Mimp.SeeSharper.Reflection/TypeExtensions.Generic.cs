@@ -30,7 +30,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
-        public static IEnumerable<IEnumerable<Type>> GetGenericArguments(this Type type, Type genericTypeDefinition)
+        public static IEnumerable<IEnumerable<Type>> GetAllGenericArguments(this Type type, Type genericTypeDefinition)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -73,11 +73,11 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException">If <paramref name="genericTypeDefinition"/> isn't a generic type definition.</exception>
         /// <exception cref="InvalidOperationException">If <paramref name="type"/> inherit no or more than one <paramref name="genericTypeDefinition"/>.</exception>
-        public static IEnumerable<Type> GetGenericArgumentsRequired(this Type type, Type genericTypeDefinition)
+        public static IEnumerable<Type> GetGenericArguments(this Type type, Type genericTypeDefinition)
         {
             IEnumerable<Type>? result = null;
 
-            foreach (var t in type.GetGenericArguments(genericTypeDefinition))
+            foreach (var t in type.GetAllGenericArguments(genericTypeDefinition))
             {
                 if (result is not null)
                     throw new InvalidOperationException($@"""{type}"" has ambiguous generic types for ""{genericTypeDefinition}"": {string.Join(", ", result)} - {string.Join(", ", t)}");
@@ -108,7 +108,7 @@ namespace Mimp.SeeSharper.Reflection
             if (!genericTypeDefinition.IsGenericTypeDefinition)
                 throw new ArgumentException($"{genericTypeDefinition} isn't a generic type definition.", nameof(genericTypeDefinition));
 
-            foreach (var types in type.GetGenericArguments(genericTypeDefinition))
+            foreach (var types in type.GetAllGenericArguments(genericTypeDefinition))
                 yield return types.Any() ? genericTypeDefinition.MakeGenericType(types.ToArray()) : genericTypeDefinition;
         }
 

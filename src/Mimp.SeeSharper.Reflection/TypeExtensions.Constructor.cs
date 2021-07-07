@@ -22,7 +22,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetConstructorRequired(this Type type, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
+        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -49,7 +49,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetConstructorRequired(this Type type, BindingFlags bindingAttr, Binder binder, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
+        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder binder, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -73,7 +73,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetConstructorRequired(this Type type, IEnumerable<Type> types)
+        public static ConstructorInfo GetSingleConstructor(this Type type, IEnumerable<Type> types)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -92,12 +92,12 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetConstructorRequired(this Type type)
+        public static ConstructorInfo GetSingleConstructor(this Type type)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
 
-            return type.GetConstructorRequired(Type.EmptyTypes);
+            return type.GetSingleConstructor(Type.EmptyTypes);
         }
 
 
@@ -117,7 +117,7 @@ namespace Mimp.SeeSharper.Reflection
             if (delegateType is null)
                 throw new ArgumentNullException(nameof(delegateType));
 
-            return type.GetConstructorRequired(delegateType.GetDelegateParameterTypes()).GetDelegate(delegateType);
+            return type.GetSingleConstructor(delegateType.GetDelegateParameterTypes()).GetDelegate(delegateType);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Mimp.SeeSharper.Reflection
             if (delegateType is null)
                 throw new ArgumentNullException(nameof(delegateType));
 
-            return type.GetConstructorRequired(types).GetParameterDelegate(delegateType);
+            return type.GetSingleConstructor(types).GetParameterDelegate(delegateType);
         }
 
         /// <summary>

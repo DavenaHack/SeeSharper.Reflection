@@ -4,7 +4,7 @@
     <TargetFrameworks>net5.0;netcoreapp3.1;netcoreapp2.1;netstandard2.1;net48;net461</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <AssemblyName>Mimp.SeeSharper.Reflection</AssemblyName>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <AssemblyTitle>SeeSharper Reflection</AssemblyTitle>
     <Description>SeeSharper Reflection help you to handle reflection easily.</Description>
     <Authors>SeeSharper Contributors</Authors>
@@ -13,7 +13,7 @@
     <Copyright>Copyright © 2021 SeeSharper Contributors</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageId>Mimp.SeeSharper.Reflection</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageTags>seesharper;.net;reflection;</PackageTags>
     <PackageProjectUrl>https://github.com/DavenaHack/SeeSharper.Reflection</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

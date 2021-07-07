@@ -282,7 +282,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="InvalidOperationException">If type isn't <see cref="Nullable{T}"/></exception>
         public static Type? GetNullableValueType(this Type type)
         {
-            var types = type.GetGenericArgumentsRequired(typeof(Nullable<>));
+            var types = type.GetGenericArguments(typeof(Nullable<>));
             return types.Any() ? types.First() : null;
         }
 
@@ -343,7 +343,7 @@ namespace Mimp.SeeSharper.Reflection
         {
             try
             {
-                var types = type.GetGenericArgumentsRequired(typeof(IEnumerable<>));
+                var types = type.GetGenericArguments(typeof(IEnumerable<>));
                 return types.Any() ? types.First() : null;
             }
             catch
@@ -405,7 +405,7 @@ namespace Mimp.SeeSharper.Reflection
         {
             try
             {
-                var types = type.GetGenericArgumentsRequired(typeof(IEnumerator<>));
+                var types = type.GetGenericArguments(typeof(IEnumerator<>));
                 return types.Any() ? types.First() : null;
             }
             catch
@@ -460,7 +460,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="InvalidOperationException">If type isn't <see cref="IAsyncEnumerable{T}"/>.</exception>
         public static Type? GetIAsyncEnumerableValueType(this Type type)
         {
-            var types = type.GetGenericArgumentsRequired(typeof(IAsyncEnumerable<>));
+            var types = type.GetGenericArguments(typeof(IAsyncEnumerable<>));
             return types.Any() ? types.First() : null;
         }
 
@@ -504,7 +504,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="InvalidOperationException">If type isn't <see cref="IAsyncEnumerator{T}"/>.</exception>
         public static Type? GetIAsyncEnumeratorValueType(this Type type)
         {
-            var types = type.GetGenericArgumentsRequired(typeof(IAsyncEnumerator<>));
+            var types = type.GetGenericArguments(typeof(IAsyncEnumerator<>));
             return types.Any() ? types.First() : null;
         }
 
@@ -569,7 +569,7 @@ namespace Mimp.SeeSharper.Reflection
         {
             try
             {
-                var types = type.GetGenericArgumentsRequired(typeof(ICollection<>));
+                var types = type.GetGenericArguments(typeof(ICollection<>));
                 return types.Any() ? types.First() : null;
             }
             catch
@@ -626,7 +626,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="InvalidOperationException">If type isn't <see cref="ISet{T}"/>.</exception>
         public static Type? GetISetValueType(this Type type)
         {
-            var types = type.GetGenericArgumentsRequired(typeof(ISet<>));
+            var types = type.GetGenericArguments(typeof(ISet<>));
             return types.Any() ? types.First() : null;
         }
 
@@ -687,7 +687,7 @@ namespace Mimp.SeeSharper.Reflection
         {
             try
             {
-                var types = type.GetGenericArgumentsRequired(typeof(IList<>));
+                var types = type.GetGenericArguments(typeof(IList<>));
                 return types.Any() ? types.First() : null;
             }
             catch
@@ -755,7 +755,7 @@ namespace Mimp.SeeSharper.Reflection
         {
             try
             {
-                var types = type.GetGenericArgumentsRequired(typeof(IDictionary<,>));
+                var types = type.GetGenericArguments(typeof(IDictionary<,>));
                 return types.Any() ? types : null;
             }
             catch
@@ -825,7 +825,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <exception cref="InvalidOperationException">If type isn't <see cref="KeyValuePair{K,V}"/>.</exception>
         public static IEnumerable<Type>? GetKeyValuePairKeyValueType(this Type type)
         {
-            var types = type.GetGenericArgumentsRequired(typeof(KeyValuePair<,>));
+            var types = type.GetGenericArguments(typeof(KeyValuePair<,>));
             return types.Any() ? types : null;
         }
 
