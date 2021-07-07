@@ -14,7 +14,7 @@ namespace Mimp.SeeSharper.Reflection.Test
         public void TestGetGenericArguments()
         {
 
-            var types = typeof(IDictionary<string, object>).GetGenericArgumentsRequired(typeof(IDictionary<,>)).ToArray();
+            var types = typeof(IDictionary<string, object>).GetGenericArguments(typeof(IDictionary<,>)).ToArray();
 
             Assert.IsTrue(types[0] == typeof(string));
             Assert.IsTrue(types[1] == typeof(object));
