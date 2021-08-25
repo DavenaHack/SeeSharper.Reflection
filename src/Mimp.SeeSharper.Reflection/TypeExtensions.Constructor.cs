@@ -22,7 +22,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
+        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder? binder, CallingConventions callConvention, IEnumerable<Type> types, IEnumerable<ParameterModifier>? modifiers)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -35,7 +35,7 @@ namespace Mimp.SeeSharper.Reflection
             if (modifiers is null)
                 throw new ArgumentNullException(nameof(modifiers));
 
-            return type.GetConstructor(bindingAttr, binder, callConvention, types.ToArray(), modifiers.ToArray()) ?? throw new InvalidOperationException("No matching constructor found");
+            return type.GetConstructor(bindingAttr, binder, callConvention, types.ToArray(), modifiers?.ToArray()) ?? throw new InvalidOperationException("No matching constructor found");
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Mimp.SeeSharper.Reflection
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
-        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder binder, IEnumerable<Type> types, IEnumerable<ParameterModifier> modifiers)
+        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, Binder? binder, IEnumerable<Type> types, IEnumerable<ParameterModifier>? modifiers)
         {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
@@ -62,7 +62,28 @@ namespace Mimp.SeeSharper.Reflection
             if (modifiers is null)
                 throw new ArgumentNullException(nameof(modifiers));
 
-            return type.GetConstructor(bindingAttr, binder, types.ToArray(), modifiers.ToArray()) ?? throw new InvalidOperationException("No matching constructor found");
+            return type.GetConstructor(bindingAttr, binder, types.ToArray(), modifiers?.ToArray()) ?? throw new InvalidOperationException("No matching constructor found");
+        }
+
+        /// <summary>
+        /// Return a matching constructor or throw a <see cref="InvalidOperationException"/>.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="bindingAttr"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="InvalidOperationException">If no matching constructor exists.</exception>
+        public static ConstructorInfo GetSingleConstructor(this Type type, BindingFlags bindingAttr, IEnumerable<Type> types)
+        {
+            if (type is null)
+                throw new ArgumentNullException(nameof(type));
+            if (types is null)
+                throw new ArgumentNullException(nameof(types));
+            if (types.Any(t => t is null))
+                throw new ArgumentNullException(nameof(types), "At least one type is null.");
+
+            return type.GetConstructor(bindingAttr, null, types.ToArray(), null) ?? throw new InvalidOperationException("No matching constructor found");
         }
 
         /// <summary>
